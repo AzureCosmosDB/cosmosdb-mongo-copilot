@@ -1,0 +1,27 @@
+{
+  "DetailedErrors": true,
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  },
+  "AllowedHosts": "*",
+  "OpenAi": {
+    "Endpoint": "{YourOpenAIEnpoint}",
+    "Key": "{YourOpenAIKey}",
+    "EmbeddingsDeployment": "ada-002",
+    "CompletionsDeployment": "gpt35",
+    "MaxConversationTokens": "1500",
+    "MaxContextTokens": "4000",
+    "MaxCompletionTokens": "4000",
+    "MaxEmbeddingTokens": "4000"
+  },
+  "MongoDb": {
+    "Connection": "mongodb+srv://{YourMongoUsername}:{YourMongoKey}@{YourMonogClusterName}.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000",
+    "DatabaseName": "retaildb",
+    "CollectionNames": "products, customers, salesOrders, completions",
+    "MaxVectorSearchResults": "50",
+    "VectorIndexType": "hnsw"
+  }
+}
