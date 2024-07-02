@@ -19,7 +19,7 @@ var deployments = [
   }
 ]
 
-module openAiAccount '../core/openAI/account.bicep' = {
+module openAiAccount '../core/ai/openAI/account.bicep' = {
   name: 'openai-account'
   params: {
     name: accountName
@@ -32,7 +32,7 @@ module openAiAccount '../core/openAI/account.bicep' = {
 }
 
 @batchSize(1)
-module openAiModelDeployments '../core/ai/cognitive-services/deployment.bicep' = [
+module openAiModelDeployments '../core/ai/openAI/deployment.bicep' = [
   for (deployment, _) in deployments: {
     name: 'openai-model-deployment-${deployment.name}'
     params: {

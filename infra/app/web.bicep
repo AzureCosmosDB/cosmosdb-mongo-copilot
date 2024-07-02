@@ -9,9 +9,6 @@ param tags object = {}
 @description('SKU of the App Service Plan.')
 param sku string = 'S1'
 
-@description('Endpoint for Azure Cosmos DB for NoSQL account.')
-param databaseAccountEndpoint string
-
 @description('Endpoint for Azure OpenAI account.')
 param openAiAccountEndpoint string
 
@@ -22,15 +19,6 @@ type openAiOptions = {
 
 @description('Application configuration settings for OpenAI.')
 param openAiSettings openAiOptions
-
-type cosmosDbOptions = {
-  database: string
-  chatContainer: string
-  cacheContainer: string
-  productContainer: string
-}
-@description('Application configuration settings for Azure Cosmos DB.')
-param cosmosDbSettings cosmosDbOptions
 
 type chatOptions = {
   maxConversationTokens: string
@@ -45,9 +33,6 @@ type managedIdentity = {
   resourceId: string
   clientId: string
 }
-
-@description('Unique identifier for user-assigned managed identity.')
-param userAssignedManagedIdentity managedIdentity
 
 module appServicePlan '../core/host/app-service/plan.bicep' = {
   name: 'app-service-plan'
@@ -73,9 +58,6 @@ module appServiceWebApp '../core/host/app-service/site.bicep' = {
     runtimeVersion: '8.0'
     kind: 'app,linux'
     enableSystemAssignedManagedIdentity: false
-    userAssignedManagedIdentityIds: [
-      userAssignedManagedIdentity.resourceId
-    ]
   }
 }
 
@@ -90,15 +72,9 @@ module appServiceWebAppConfig '../core/host/app-service/config.bicep' = {
       SEMANTICKERNEL__ENDPOINT: openAiAccountEndpoint
       SEMANTICKERNEL__COMPLETIONDEPLOYMENTNAME: openAiSettings.completionDeploymentName
       SEMANTICKERNEL__EMBEDDINGDEPLOYMENTNAME: openAiSettings.embeddingDeploymentName
-      COSMOSDB__ENDPOINT: databaseAccountEndpoint
-      COSMOSDB__DATABASE: cosmosDbSettings.database
-      COSMOSDB__CHATCONTAINER: cosmosDbSettings.chatContainer
-      COSMOSDB__CACHECONTAINER: cosmosDbSettings.cacheContainer
-      COSMOSDB__PRODUCTCONTAINER: cosmosDbSettings.productContainer
       CHAT_MAXCONVERSATIONTOKENS: chatSettings.maxConversationTokens
       CHAT_CACHESIMILARITYSCORE: chatSettings.cacheSimilarityScore
       CHAT_PRODUCTMAXRESULTS: chatSettings.productMaxResults
-      AZURE_CLIENT_ID: userAssignedManagedIdentity.clientId
     }
   }
 }

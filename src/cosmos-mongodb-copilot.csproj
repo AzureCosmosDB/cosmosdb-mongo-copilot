@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>Search</RootNamespace>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<UserSecretsId>86b98284-0715-492f-80de-95ad9057b2d4</UserSecretsId>
+	</PropertyGroup>
+	<ItemGroup>
+		<Content Include=".vscode\settings.json" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
+		<PackageReference Include="Humanizer" Version="2.*" />
+		<PackageReference Include="Microsoft.ML.Tokenizers" Version="0.22.0-preview.24179.1" />
+		<PackageReference Include="Microsoft.SemanticKernel" Version="1.11.0" />
+		<PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureCosmosDBMongoDB" Version="1.11.1-alpha" />
+		<PackageReference Include="MongoDB.Driver" Version="2.*" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.*" />
+		<PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.*" />
+	</ItemGroup>
+</Project>

@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\infra",
+    "\\infra\\app",
+    "\\infra\\core",
+    "\\infra\\core\\ai",
+    "\\infra\\core\\ai\\openAI",
+    "\\infra\\core\\security",
+    "\\infra\\core\\security\\identity",
+    "\\infra\\core\\security\\role",
+    "\\src"
+  ],
+  "SelectedNode": "\\src\\cosmos-mongodb-copilot.sln",
+  "PreviewInSolutionExplorer": false
+}

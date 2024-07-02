@@ -17,7 +17,6 @@ param principalId string = ''
 
 // Optional parameters
 param openAiAccountName string = ''
-param cosmosDbAccountName string = ''
 param userAssignedIdentityName string = ''
 param appServicePlanName string = ''
 param appServiceWebAppName string = ''
@@ -48,6 +47,7 @@ module identity 'app/identity.bicep' = {
   name: 'identity'
   scope: resourceGroup
   params: {
+    identityName: !empty(userAssignedIdentityName) ? userAssignedIdentityName : '${abbreviations.userAssignedIdentity}-${resourceToken}'
     location: location
     tags: tags
   }
@@ -69,14 +69,7 @@ module web 'app/web.bicep' = {
   params: {
     appName: !empty(appServiceWebAppName) ? appServiceWebAppName : '${abbreviations.appServiceWebApp}-${resourceToken}'
     planName: !empty(appServicePlanName) ? appServicePlanName : '${abbreviations.appServicePlan}-${resourceToken}'
-    databaseAccountEndpoint: database.outputs.endpoint
     openAiAccountEndpoint: ai.outputs.endpoint
-    cosmosDbSettings: {
-      database: database.outputs.database.name
-      chatContainer: database.outputs.containers[0].name
-      cacheContainer: database.outputs.containers[1].name
-      productContainer: database.outputs.containers[2].name
-    }
     openAiSettings: {
       completionDeploymentName: ai.outputs.deployments[0].name
       embeddingDeploymentName: ai.outputs.deployments[1].name
@@ -85,10 +78,6 @@ module web 'app/web.bicep' = {
       maxConversationTokens: chatSettings.maxConversationTokens
       cacheSimilarityScore: chatSettings.cacheSimilarityScore
       productMaxResults: chatSettings.productMaxResults
-    }
-    userAssignedManagedIdentity: {
-      resourceId: identity.outputs.resourceId
-      clientId: identity.outputs.clientId
     }
     location: location
     tags: tags
@@ -100,7 +89,6 @@ module security 'app/security.bicep' = {
   name: 'security'
   scope: resourceGroup
   params: {
-    databaseAccountName: database.outputs.accountName
     appPrincipalId: identity.outputs.principalId
     userPrincipalId: !empty(principalId) ? principalId : null
   }
