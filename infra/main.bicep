@@ -69,15 +69,15 @@ module web 'app/web.bicep' = {
   params: {
     appName: !empty(appServiceWebAppName) ? appServiceWebAppName : '${abbreviations.appServiceWebApp}-${resourceToken}'
     planName: !empty(appServicePlanName) ? appServicePlanName : '${abbreviations.appServicePlan}-${resourceToken}'
-    openAiAccountEndpoint: ai.outputs.endpoint
-    openAiSettings: {
-      completionDeploymentName: ai.outputs.deployments[0].name
-      embeddingDeploymentName: ai.outputs.deployments[1].name
+    userAssignedManagedIdentity: {
+      resourceId: identity.outputs.resourceId
+      clientId: identity.outputs.clientId
     }
-    chatSettings: {
-      maxConversationTokens: chatSettings.maxConversationTokens
-      cacheSimilarityScore: chatSettings.cacheSimilarityScore
-      productMaxResults: chatSettings.productMaxResults
+    configSettings : {
+      OpenAiEndpoint: ai.outputs.endpoint
+      OpenAiCompletionsDeployment : ai.outputs.deployments[0].name
+      OpenAiEmbeddingsDeployment  : ai.outputs.deployments[1].name
+      MongoDbConnection : database.outputs.mongoDBConnection
     }
     location: location
     tags: tags
@@ -94,12 +94,21 @@ module security 'app/security.bicep' = {
   }
 }
 
+module database 'app/database.bicep' = {
+  name: 'database'
+  scope: resourceGroup
+  params: {    
+    clusterName: '${abbreviations.cosmosDbCluster}-${resourceToken}'
+    location: location
+    adminUsername: 'Admin${resourceToken}' 
+    adminPassword: 'PAssw0rd${resourceToken}!' 
+  }
+}
+
 // AI outputs
 output AZURE_OPENAI_ACCOUNT_ENDPOINT string = ai.outputs.endpoint
 output AZURE_OPENAI_COMPLETION_DEPLOYMENT_NAME string = ai.outputs.deployments[0].name
 output AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME string = ai.outputs.deployments[1].name
 
-// Chat outputs
-output AZURE_CHAT_MAX_CONVERSATION_TOKENS string = chatSettings.maxConversationTokens
-output AZURE_CHAT_CACHE_SIMILARITY_SCORE string = chatSettings.cacheSimilarityScore
-output AZURE_CHAT_PRODUCT_MAX_RESULTS string = chatSettings.productMaxResults
+// CosmosDB outputs
+output AZURE_MONGODB_CONNECTION_STRING string = database.outputs.mongoDBConnection

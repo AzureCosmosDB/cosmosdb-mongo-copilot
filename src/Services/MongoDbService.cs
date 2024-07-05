@@ -166,6 +166,32 @@ public class MongoDbService
         Console.WriteLine("creating database");
         _client.GetDatabase("retaildb");
 
+        Console.WriteLine("creating collections");
+        try
+        {
+            _database.DropCollection("products");
+        }
+        catch
+        {
+            _logger.LogError($"Exception: Unable to drop collection products");
+        }
+
+        try
+        {
+            _database.DropCollection("customers");
+        }
+        catch
+        {
+            _logger.LogError($"Exception: Unable to drop collection customers");
+        }
+        try
+        {
+            _database.DropCollection("salesOrders");
+        }
+        catch
+        {
+            _logger.LogError($"Exception: Unable to drop collection salesOrders");
+        }
 
         Console.WriteLine("creating collections");
         _database.CreateCollection("products");
@@ -414,7 +440,6 @@ public class MongoDbService
     {
         string sObject = string.Empty;
 
-
         try
         {
             JObject obj = JObject.FromObject(o);
@@ -435,10 +460,9 @@ public class MongoDbService
         try
         {
 
-
             IEnumerable<BsonDocument> documents = BsonSerializer.Deserialize<IEnumerable<BsonDocument>>(json);
 
-            Console.WriteLine("Loading documents");
+            _logger.LogInformation("Loading documents");
 
             foreach (var document in documents)
             {
@@ -453,8 +477,13 @@ public class MongoDbService
 
                 if (documentCounter % 50 == 0)
                 {
-                    Console.WriteLine($"written {documentCounter} documents ");
+                    _logger.LogInformation($"written {documentCounter} documents ");
                 }
+
+                /// remove to improve load performance 
+                _logger.LogInformation("waiting 60 seconds");
+                System.Threading.Thread.Sleep(60000);
+
 
             }
 
@@ -481,7 +510,7 @@ public class MongoDbService
 
             foreach (string blobId in blobIds)
             {
-                Console.WriteLine($"Ingesting {blobId} data from blob storage.");
+                _logger.LogInformation($"Ingesting {blobId} data from blob storage.");
                 BlobClient blob = blobContainerClient.GetBlobClient($"{blobId}.json");
                 if (await blob.ExistsAsync())
                 {

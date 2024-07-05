@@ -2,8 +2,10 @@ using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using Search.Options;
 using Search.Services;
+using System.Reflection;
 
 #pragma warning disable  CS8600, CS8602, CS8604 
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -29,15 +31,16 @@ app.UseRouting();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
+
 await app.RunAsync();
 
 static class ProgramExtensions
 {
     public static void RegisterConfiguration(this WebApplicationBuilder builder)
     {
-        //builder.Configuration.AddUserSecrets<Program>(optional: true, reloadOnChange: true);
-        builder.Configuration.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
-
+        //builder.Configuration.AddUserSecrets(Assembly.GetExecutingAssembly(), optional: false);
+        //builder.Configuration.AddUserSecrets<Program>(optional: false, reloadOnChange: true);
+        //builder.Configuration.AddJsonFile("appsettings.Development.json", optional: true, reloadOnChange: true);
         builder.Services.AddOptions<OpenAi>()
             .Bind(builder.Configuration.GetSection(nameof(OpenAi)));
 
@@ -59,11 +62,11 @@ static class ProgramExtensions
             }
             else
             {
+
                 return new SemanticKernelService(
                     new OpenAi
                     {
                         Endpoint = semanticKernalOptions.Value?.Endpoint ?? string.Empty,
-                        Key = semanticKernalOptions.Value?.Key ?? string.Empty,
                         EmbeddingsDeployment = semanticKernalOptions.Value?.EmbeddingsDeployment ?? string.Empty,   
                         CompletionsDeployment = semanticKernalOptions.Value?.CompletionsDeployment ?? string.Empty, 
                         MaxEmbeddingTokens = semanticKernalOptions.Value?.MaxEmbeddingTokens ?? string.Empty,

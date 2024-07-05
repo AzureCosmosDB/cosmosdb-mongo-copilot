@@ -9,30 +9,24 @@ param tags object = {}
 @description('SKU of the App Service Plan.')
 param sku string = 'S1'
 
-@description('Endpoint for Azure OpenAI account.')
-param openAiAccountEndpoint string
-
-type openAiOptions = {
-  completionDeploymentName: string
-  embeddingDeploymentName: string
-}
-
-@description('Application configuration settings for OpenAI.')
-param openAiSettings openAiOptions
-
-type chatOptions = {
-  maxConversationTokens: string
-  cacheSimilarityScore: string
-  productMaxResults: string
-}
-
-@description('Application configuration settings for Chat Service.')
-param chatSettings chatOptions
-
-type managedIdentity = {
+type managedIdentityType = {
   resourceId: string
   clientId: string
 }
+
+@description('Unique identifier for user-assigned managed identity.')
+param userAssignedManagedIdentity managedIdentityType
+
+type configSettingsType = {
+    OpenAiEndpoint: string
+    OpenAiCompletionsDeployment : string
+    OpenAiEmbeddingsDeployment : string
+    MongoDbConnection : string
+
+}
+
+@description('Environment App Settings Variables. ')
+param configSettings configSettingsType
 
 module appServicePlan '../core/host/app-service/plan.bicep' = {
   name: 'app-service-plan'
@@ -58,6 +52,9 @@ module appServiceWebApp '../core/host/app-service/site.bicep' = {
     runtimeVersion: '8.0'
     kind: 'app,linux'
     enableSystemAssignedManagedIdentity: false
+    userAssignedManagedIdentityIds: [
+      userAssignedManagedIdentity.resourceId
+    ]
   }
 }
 
@@ -66,18 +63,23 @@ module appServiceWebAppConfig '../core/host/app-service/config.bicep' = {
   params: {
     parentSiteName: appServiceWebApp.outputs.name
     appSettings: {
-      OPENAI__ENDPOINT: openAiAccountEndpoint
-      OPENAI__COMPLETIONDEPLOYMENTNAME: openAiSettings.completionDeploymentName
-      OPENAI__EMBEDDINGDEPLOYMENTNAME: openAiSettings.embeddingDeploymentName
-      SEMANTICKERNEL__ENDPOINT: openAiAccountEndpoint
-      SEMANTICKERNEL__COMPLETIONDEPLOYMENTNAME: openAiSettings.completionDeploymentName
-      SEMANTICKERNEL__EMBEDDINGDEPLOYMENTNAME: openAiSettings.embeddingDeploymentName
-      CHAT_MAXCONVERSATIONTOKENS: chatSettings.maxConversationTokens
-      CHAT_CACHESIMILARITYSCORE: chatSettings.cacheSimilarityScore
-      CHAT_PRODUCTMAXRESULTS: chatSettings.productMaxResults
+       OpenAi__Endpoint : configSettings.OpenAiEndpoint
+       OpenAi__CompletionsDeployment : configSettings.OpenAiCompletionsDeployment
+       OpenAi__EmbeddingsDeployment : configSettings.OpenAiEmbeddingsDeployment
+       OpenAi__MaxEmbeddingTokens : '4000'
+       OpenAi__MaxConversationTokens : '1500'
+       OpenAi__MaxCompletionTokens : '4000'
+       OpenAi__MaxContextTokens : '4000'
+       MongoDb__Connection : configSettings.MongoDbConnection
+       MongoDb__DatabaseName : 'retaildb'
+       MongoDb__CollectionNames : 'products, customers, salesOrders, completions'
+       MongoDb__MaxVectorSearchResults : '50'
+       MongoDb__VectorIndexType : 'hnsw'
+       AZURE_CLIENT_ID: userAssignedManagedIdentity.clientId
     }
   }
 }
+
 
 output name string = appServiceWebApp.outputs.name
 output endpoint string = appServiceWebApp.outputs.endpoint

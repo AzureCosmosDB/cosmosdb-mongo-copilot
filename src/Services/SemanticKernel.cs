@@ -6,9 +6,11 @@ using System.Text.RegularExpressions;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.Memory;
 using Microsoft.SemanticKernel.Connectors.AzureCosmosDBMongoDB;
+using Azure.Identity;
 
 using Search.Options;
 using Search.Models;
+using Azure.Core;
 
 #pragma warning disable  CS8600, CS8602, CS8604 
 #pragma warning disable SKEXP0010, SKEXP0001, SKEXP0020
@@ -77,8 +79,8 @@ public class SemanticKernelService
     /// </summary>
     /// <param name="semanticKernelOptions">Endpoint URI.</param>
     /// <param name="key">Account key.</param>
-    /// <param name="completionDeploymentName">Name of the deployed Azure OpenAI completion model.</param>
-    /// <param name="embeddingDeploymentName">Name of the deployed Azure OpenAI embedding model.</param>
+    /// <param name="completionDeployment">Name of the deployed Azure OpenAI completion model.</param>
+    /// <param name="embeddingDeployment">Name of the deployed Azure OpenAI embedding model.</param>
     /// <exception cref="ArgumentNullException">Thrown when endpoint, key, or modelName is either null or empty.</exception>
     /// <remarks>
     /// This constructor will validate credentials and create a Semantic Kernel instance.
@@ -91,7 +93,7 @@ public class SemanticKernelService
         _cosmicSystemPrompt += "";
         _sourceSelectionSystemPrompt += "";
         ArgumentNullException.ThrowIfNullOrEmpty(semanticKernelOptions.Endpoint);
-        ArgumentNullException.ThrowIfNullOrEmpty(semanticKernelOptions.Key);
+       // ArgumentNullException.ThrowIfNullOrEmpty(semanticKernelOptions.Key);
         ArgumentNullException.ThrowIfNullOrEmpty(semanticKernelOptions.CompletionsDeployment);
         ArgumentNullException.ThrowIfNullOrEmpty(semanticKernelOptions.EmbeddingsDeployment);
         ArgumentNullException.ThrowIfNullOrEmpty(semanticKernelOptions.MaxCompletionTokens);
@@ -108,16 +110,19 @@ public class SemanticKernelService
 
         _logger = logger;
 
+        TokenCredential credential = new DefaultAzureCredential();
+
         // Initialize the Semantic Kernel
         var kernelBuilder = Kernel.CreateBuilder();
+        
         kernelBuilder.AddAzureOpenAIChatCompletion(
             semanticKernelOptions.CompletionsDeployment,
             semanticKernelOptions.Endpoint,
-            semanticKernelOptions.Key);
+            credential);
         kernelBuilder.AddAzureOpenAITextEmbeddingGeneration(
             semanticKernelOptions.EmbeddingsDeployment,
             semanticKernelOptions.Endpoint,
-            semanticKernelOptions.Key);
+            credential);
         kernel = kernelBuilder.Build();
 
         // Build Sematic Kernel memory with Cosmos DB for MongoDB connector
@@ -133,7 +138,7 @@ public class SemanticKernelService
                 .WithAzureOpenAITextEmbeddingGeneration(
                     semanticKernelOptions.EmbeddingsDeployment,
                     semanticKernelOptions.Endpoint,
-                    semanticKernelOptions.Key)
+                    credential)
                 .WithMemoryStore(memoryStore)
                 .Build();
     }

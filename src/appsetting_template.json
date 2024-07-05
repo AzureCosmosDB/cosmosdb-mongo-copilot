@@ -9,7 +9,6 @@
   "AllowedHosts": "*",
   "OpenAi": {
     "Endpoint": "{YourOpenAIEnpoint}",
-    "Key": "{YourOpenAIKey}",
     "EmbeddingsDeployment": "ada-002",
     "CompletionsDeployment": "gpt35",
     "MaxConversationTokens": "1500",
