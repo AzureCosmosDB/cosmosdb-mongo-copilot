@@ -19,11 +19,11 @@ This sample application shows how to build a Generative-AI RAG Pattern applicati
 
 This application demonstrates the following concepts and how to implement them:
 
-- The basics of building a highly scalable Generative-AI chat application using Azure Cosmos DB for NoSQL.
+- The basics of building a highly scalable Generative-AI chat application using Azure Cosmos DB for MongoDB.
 - Generating completions and embeddings using Azure OpenAI Service.
 - Managing a context window (chat history) for natural conversational interactions with an LLM.
 - Manage token consumption and payload sizes for Azure OpenAI Service requests.
-- Building a semantic cache using Azure Cosmos DB for NoSQL vector search for improved performance and cost.
+- Building a semantic cache using Azure Cosmos DB for MonogDB vector index and the Semantic Kernel Connector for improved performance and cost.
 - Using the Semantic Kernel SDK for completion and embeddings generation.
 - Implementing RAG Pattern using vector search in Azure Cosmos DB for NoSQL on custom data to augment generated responses from an LLM. 
 
