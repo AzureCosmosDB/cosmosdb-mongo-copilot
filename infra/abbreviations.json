@@ -1,0 +1,7 @@
+{
+  "cosmosDbCluster": "cosmos-db-mongodb",
+  "openAiAccount": "openai",
+  "userAssignedIdentity": "ua-id",
+  "appServiceWebApp": "web",
+  "appServicePlan": "plan"
+}
