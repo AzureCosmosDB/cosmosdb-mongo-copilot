@@ -78,18 +78,20 @@
                         }
                     </div>
                     <div class="nav-item py-2 d-grid">
-                        <NavLink style="cursor:pointer" class="btn btn-sm mx-1 btn-secondary d-flex flex-row align-items start" Match="NavLinkMatch.All" @onclick="@(e => ClearCache())">
-                            <i class="bi bi-plus"></i>
+                    </div>
+                    <div class="nav-item py-2 d-grid">
+                        <NavLink style="cursor:pointer; background-color: #660000" class="btn btn-sm mx-1 btn-secondary d-flex flex-row align-items start" Match="NavLinkMatch.All" @onclick="@(e => LoadDatabase())">
+                            <i class="bi bi-gear"></i>
                             <span class="flex-fill">
-                                Admin: Clear Cache
+                                Admin: Load Database
                             </span>
                         </NavLink>
                     </div>
                     <div class="nav-item py-2 d-grid">
-                        <NavLink style="cursor:pointer" class="btn btn-sm mx-1 btn-secondary d-flex flex-row align-items start" Match="NavLinkMatch.All" @onclick="@(e => LoadDatabase())">
-                            <i class="bi bi-plus"></i>
+                        <NavLink style="cursor:pointer; background-color: #660000" class="btn btn-sm mx-1 btn-secondary d-flex flex-row align-items start" Match="NavLinkMatch.All" @onclick="@(e => ClearCache())">
+                            <i class="bi bi-gear"></i>
                             <span class="flex-fill">
-                                Admin: Load Database
+                                Admin: Clear Cache
                             </span>
                         </NavLink>
                     </div>
