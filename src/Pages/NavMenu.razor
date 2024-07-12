@@ -53,16 +53,16 @@
                                                 <i class="bi bi-chat-right-dots-fill me-2"></i>
                                             }
                                             <span title="@session.Name" class="ms-1">
-                                                @SafeSubstring(session.Name,20)
+                                                @SafeSubstring(session.Name, 20)
                                             </span>
                                         </a>
                                     </div>
                                     <div class="card-footer d-flex align-items-between">
                                         <span class="flex-grow-1"></span>
                                         <div class="align-items-between">
-                                        <span class="me-2 badge rounded-pill bg-light" >
-                                            Tokens Used: @session.TokensUsed
-                                        </span>
+                                            <span class="me-2 badge rounded-pill bg-light">
+                                                Tokens Used: @session.TokensUsed
+                                            </span>
                                         </div>
                                         <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-sm btn-link text-light" @onclick="@(e => OpenInput(session.SessionId,session.Name))">
@@ -78,8 +78,18 @@
                         }
                     </div>
                     <div class="nav-item py-2 d-grid">
-                        <NavLink style="cursor:pointer" class="btn btn-sm mx-1 btn-secondary d-flex flex-row align-items start" Match="NavLinkMatch.All" @onclick="@(e => ClearCache())">
-                            <i class="bi bi-plus"></i>
+                    </div>
+                    <div class="nav-item py-2 d-grid">
+                        <NavLink style="cursor:pointer; background-color: #660000" class="btn btn-sm mx-1 btn-secondary d-flex flex-row align-items start" Match="NavLinkMatch.All" @onclick="@(e => LoadDatabase())">
+                            <i class="bi bi-gear"></i>
+                            <span class="flex-fill">
+                                Admin: Load Database
+                            </span>
+                        </NavLink>
+                    </div>
+                    <div class="nav-item py-2 d-grid">
+                        <NavLink style="cursor:pointer; background-color: #660000" class="btn btn-sm mx-1 btn-secondary d-flex flex-row align-items start" Match="NavLinkMatch.All" @onclick="@(e => ClearCache())">
+                            <i class="bi bi-gear"></i>
                             <span class="flex-fill">
                                 Admin: Clear Cache
                             </span>
@@ -96,9 +106,9 @@
 @if (_deletePopUpOpen)
 {
     <Confirmation Caption="Delete a Chat"
-        Message="@_popUpText"
-        OnClose="@OnConfirmationClose"
-        Type="Confirmation.Category.DeleteNot">
+                  Message="@_popUpText"
+                  OnClose="@OnConfirmationClose"
+                  Type="Confirmation.Category.DeleteNot">
     </Confirmation>
 }
 
@@ -174,7 +184,7 @@
 
     private async Task OnConfirmationClose(bool isOk)
     {
-        bool updateCurrentChat=false;
+        bool updateCurrentChat = false;
 
         if (CurrentSession is not null & _sessionId == CurrentSession?.SessionId)
             updateCurrentChat = true;
@@ -221,7 +231,7 @@
 
     private async Task OnInputClose(string newName)
     {
-        if (newName!="")
+        if (newName != "")
         {
             bool updateCurrentChat = false;
 
@@ -351,5 +361,10 @@
     private async Task ClearCache()
     {
         await chatService.ClearCacheAsync();
+    }
+
+    private async Task LoadDatabase()
+    {
+        await chatService.LoadDabaseAsync();
     }
 }

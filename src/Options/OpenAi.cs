@@ -6,7 +6,6 @@ namespace Search.Options
     {
         public required string Endpoint { get; init; }
 
-        public required string Key { get; init; }
 
         public required string EmbeddingsDeployment { get; init; }
 
@@ -19,7 +18,6 @@ namespace Search.Options
         public required string MaxEmbeddingTokens { get; init; }
 
         public required string MaxContextTokens { get; init; }
-
 
     }
 }

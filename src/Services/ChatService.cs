@@ -266,4 +266,12 @@ public class ChatService
         await _semanticKernelService.ClearCacheAsync();
     }
 
+
+    public async Task LoadDabaseAsync()
+    {
+        _mongoDbService.SetupCollections();
+        await _mongoDbService.IngestDataFromBlobStorageAsync();
+    }
+
+
 }

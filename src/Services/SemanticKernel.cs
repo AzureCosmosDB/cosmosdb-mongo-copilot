@@ -6,9 +6,10 @@ using System.Text.RegularExpressions;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.Memory;
 using Microsoft.SemanticKernel.Connectors.AzureCosmosDBMongoDB;
-
+using Azure.Identity;
 using Search.Options;
 using Search.Models;
+using Azure.Core;
 
 #pragma warning disable  CS8600, CS8602, CS8604 
 #pragma warning disable SKEXP0010, SKEXP0001, SKEXP0020
@@ -78,7 +79,6 @@ public class SemanticKernelService
         _cosmicSystemPrompt += "";
         _sourceSelectionSystemPrompt += "";
         ArgumentNullException.ThrowIfNullOrEmpty(semanticKernelOptions.Endpoint);
-        ArgumentNullException.ThrowIfNullOrEmpty(semanticKernelOptions.Key);
         ArgumentNullException.ThrowIfNullOrEmpty(semanticKernelOptions.CompletionsDeployment);
         ArgumentNullException.ThrowIfNullOrEmpty(semanticKernelOptions.EmbeddingsDeployment);
         ArgumentNullException.ThrowIfNullOrEmpty(semanticKernelOptions.MaxCompletionTokens);
@@ -94,17 +94,17 @@ public class SemanticKernelService
         _maxContextTokens = int.TryParse(semanticKernelOptions.MaxContextTokens, out _maxContextTokens) ? _maxContextTokens : 0;
 
         _logger = logger;
-
+        TokenCredential credential = new DefaultAzureCredential();
         // Initialize the Semantic Kernel
         var kernelBuilder = Kernel.CreateBuilder();
         kernelBuilder.AddAzureOpenAIChatCompletion(
             semanticKernelOptions.CompletionsDeployment,
             semanticKernelOptions.Endpoint,
-            semanticKernelOptions.Key);
+            credential);
         kernelBuilder.AddAzureOpenAITextEmbeddingGeneration(
             semanticKernelOptions.EmbeddingsDeployment,
             semanticKernelOptions.Endpoint,
-            semanticKernelOptions.Key);
+            credential);
         kernel = kernelBuilder.Build();
 
         // Build Sematic Kernel memory with Cosmos DB for MongoDB connector
@@ -120,7 +120,7 @@ public class SemanticKernelService
                 .WithAzureOpenAITextEmbeddingGeneration(
                     semanticKernelOptions.EmbeddingsDeployment,
                     semanticKernelOptions.Endpoint,
-                    semanticKernelOptions.Key)
+                    credential)
                 .WithMemoryStore(memoryStore)
                 .Build();
     }
