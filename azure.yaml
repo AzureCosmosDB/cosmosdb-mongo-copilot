@@ -1,0 +1,59 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: cosmos-copilot-mongodb
+metadata:
+  template: cosmos-copilot-mongodb
+services:
+  web:
+    project: ./src
+    language: csharp
+    host: appservice
+hooks:
+  postprovision:
+    windows:
+      run: |
+        $userSecrets = @{
+            'OpenAi:Endpoint' = $env:AZURE_OPENAI_ACCOUNT_ENDPOINT
+            'OpenAi:CompletionsDeployment' = $env:AZURE_OPENAI_COMPLETION_DEPLOYMENT_NAME
+            'OpenAi:EmbeddingsDeployment' = $env:AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME
+            'OpenAi:MaxEmbeddingTokens' = '4000'
+            'OpenAi:MaxConversationTokens' ='1500'
+            'OpenAi:MaxCompletionTokens' ='4000'
+            'OpenAi:MaxContextTokens' = '4000'
+            'MongoDb:Connection' = $env:AZURE_MONGODB_CONNECTION_STRING
+            'MongoDb:DatabaseName' = 'retaildb'
+            'MongoDb:CollectionNames'= 'products, customers, salesOrders, completions'
+            'MongoDb:MaxVectorSearchResults' = '50'
+            'MongoDb:VectorIndexType' = 'hnsw'
+            'CosmosDb:Endpoint' = $env:AZURE_COSMOS_DB_ENDPOINT         
+            'Chat:MaxConversationTokens' = $env:AZURE_CHAT_MAX_CONVERSATION_TOKENS
+            'Chat:CacheSimilarityScore' = $env:AZURE_CHAT_CACHE_SIMILARITY_SCORE
+            'Chat:ProductMaxResults' = $env:AZURE_CHAT_PRODUCT_MAX_RESULTS
+        }
+        $userSecrets | ConvertTo-Json | dotnet user-secrets set --project .\src\cosmos-mongodb-copilot.csproj
+      shell: pwsh
+      continueOnError: false
+      interactive: true
+    posix:
+      run: |
+        userSecrets=$(jq --null-input --compact-output \
+            --arg openAiEndpoint $AZURE_OPENAI_ACCOUNT_ENDPOINT \
+            --arg openAiCompletionsDeployment $AZURE_OPENAI_COMPLETION_DEPLOYMENT_NAME \
+            --arg openAiEmbeddingsDeployment $AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME \
+            --arg openAiMaxEmbeddingTokens 4000 \
+            --arg openAiMaxConversationTokens 1500 \
+            --arg openAiMaxCompletionTokens 4000 \
+            --arg openAiMaxContextTokens 4000 \
+            --arg mongoDbConnection $AZURE_OPENAI_EMBEDDING_DEPLOYMENT_NAME \
+            --arg mongoDbDatabaseName retaildb \
+            --arg mongoDbCollectionNames  products,customers,salesOrders,completions \
+            --arg mongoDbMaxVectorSearchResults 50 \
+            --arg mongoDbVectorIndexType hnsw \
+            --arg chatMaxConversationTokens $AZURE_CHAT_MAX_CONVERSATION_TOKENS \
+            --arg chatCacheSimilarityScore $AZURE_CHAT_CACHE_SIMILARITY_SCORE \
+            --arg chatProductMaxResults $AZURE_CHAT_PRODUCT_MAX_RESULTS \
+            '{"OpenAi:Endpoint":$openAiEndpoint,"OpenAi:CompletionDeployment":$openAiCompletionDeployment,"OpenAi:EmbeddingDeployment":$openAiEmbeddingDeployment,"CosmosDb:Endpoint":$cosmosDbEndpoint,"Chat:MaxConversationTokens":$maxConversationTokens,"Chat:CacheSimilarityScore":$cacheSimilarityScore,"Chat:ProductMaxResults":$productMaxResults}')
+        echo $userSecrets | dotnet user-secrets set --project ./src/cosmos-mongodb-copilot.csproj
+      shell: sh
+      continueOnError: false
+      interactive: true
