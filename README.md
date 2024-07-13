@@ -1,16 +1,4 @@
----
-page_type: sample
-languages:
-- csharp
-products:
-- azure-cosmos-db 
-- azure-openai
-name: Build a Copilot Hands-On-Lab using Azure Cosmos DB for MongoDB & Azure OpenAI Service
-urlFragment: chat-app
-description: Hands-On-Lab with Starter Solution that shows how to build a Generative AI chat application demonstrating: context windows, semantic cache, Semantic Kernel integration and more.
----
-
-# Hands-On-Lab to Build a Copilot app using Azure Cosmos DB for MongoDB & Azure OpenAI Service
+# Hands-On-Lab to Build a Copilot app with Azure Cosmos DB for MongoDB, Azure OpenAI Service and Semantic Kernel
 
 This Hands-On-Lab and starter solution walks users step-by-step how to build a Generative-AI application using Azure Cosmos DB for MongoDB using its new vector search capabilities and Azure OpenAI Service and Semantic Kernel. The sample provides practical guidance on many concepts you will need to design and build these types of applications.
 
