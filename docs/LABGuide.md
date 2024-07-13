@@ -24,7 +24,7 @@ These are the main tasks you will accomplish in this lab.
 
 You're updating an existing .NET solution that has an ASP.NET Blazor application as its sole project. This project includes service classes for Azure Cosmos DB and Azure OpenAI Service that need to connect to the deployed services in Azure.
 
-Before moving to the next step, ensure you have completed the **Service Deployment** as well as the **Configuring a lab environment** in the [README File](README.md).
+Before moving to the next step, ensure you have completed the **Service Deployment** as well as the **Configuring a lab environment** in the [README File](../README.md).
 
 ## Getting going
 So, let's have a quick look at the projects code and get started.
@@ -32,13 +32,13 @@ So, let's have a quick look at the projects code and get started.
 2.	Open the project folder **C:\Code\cosmosdb-mongo-copilot\src** , this is the app we are going to be working on. 
 
 Let's build, run and review the application to verify that there are no issues before we make any modifications.
-Let’s build and run the application.
+Let's build and run the application.
 3.	Within **Visual Studio Code**, open a new terminal.
 ![LAB330ScreenShot0.png](LAB330ScreenShot0.png)
 
 4. Copy the appsettings.json the project folder by running
 ```bash
-Copy C:\Code\appSettings.json C:\Code\MSBuildLab330\SearchLab
+Copy C:\Code\appSettings.json C:\Code\cosmosdb-mongo-copilot\SearchLab
 ```
 5. Load the deployed Cosmos DB for MongoDB with the sample data
 ```bash
@@ -65,8 +65,8 @@ You should see something that looks like this:
 ![LAB330ScreenShot1.png](LAB330ScreenShot1.png)
 
 
-####Let’s see what our assistant can do:
-10.	Click the **“Create New Chat”** button, this will start a new chat session.
+####Let's see what our assistant can do:
+10.	Click the **Create New Chat** button, this will start a new chat session.
 11. Let's ask a general knowledge question, `what is the deepest ocean?`
 
 ![LAB330BScreenShot1.png](LAB330BScreenShot1.png)
@@ -242,18 +242,18 @@ The *GetChatCompletionAsync* is used to setup the requirements to call the Seman
 You will note the following about the *GetChatCompletionAsync* method:
 
 - It takes parameters for the *prompt* (the other parameters will be used to provide additional context to the completion call later in the lab).
-- Constructs a *chatHistory* instance of the Semantic Kernal ChatHistory class.
+- Constructs a *chatHistory* instance of the Semantic Kernel ChatHistory class.
     - It adds a system prompt to *chatHistory* as a system message
     - It adds the *prompt* to the *chatHistory* sa a user message.
 - It constructs a *settings* instance and sets a number of parameters that control the completion call behavior. 
-- It calls the *GetChatMessageContentAsync* method on the Semantic Kernal initialized in the service constructor (we will have a look at that next).
+- It calls the *GetChatMessageContentAsync* method on the Semantic Kernel initialized in the service constructor (we will have a look at that next).
 - It extracts the *promptTokens and completionTokens* of the prompt and completion from the result of the call to *GetChatMessageContentAsync*
 - It returns the completion and tokens to the caller as a tuple. 
 
 You will likely now be interested in understanding how the *kernel* instance used in *GetChatCompletionAsync* is constructed. 
 
 6. Locate the **SemanticKernelService** constructor method within the **Services/SemanticKernel.cs** file.
-7. Locate the section which initializes the Semantic Kernal and looks like this:
+7. Locate the section which initializes the Semantic Kernel and looks like this:
 ```csharp
        // Initialize the Semantic Kernel
        var kernelBuilder = Kernel.CreateBuilder();
@@ -268,7 +268,7 @@ You will likely now be interested in understanding how the *kernel* instance use
        kernel = kernelBuilder.Build();
 ```
 
-The Semantic Kernal uses a pluggable connector architecture that allows us to compose the  required connector modules for the functionality we require. Here the *kernalBuilder is used to build a *kernal* with the **Azure Open AI Chat Completion Connector** and the **Azure Open AI Text Embedding Generation Connector**.
+The Semantic Kernel uses a pluggable connector architecture that allows us to compose the  required connector modules for the functionality we require. Here the *KernelBuilder is used to build a *Kernel* with the **Azure Open AI Chat Completion Connector** and the **Azure Open AI Text Embedding Generation Connector**.
 
 You will note that each connector is provided with the appropriate service settings defined in the projects appsettings.json file.
 
@@ -615,7 +615,7 @@ var embeddings = await kernel.GetRequiredService<ITextEmbeddingGenerationService
     .GenerateEmbeddingAsync(input);
 float[] embeddingsArray = embeddings.ToArray();
 ```
-The method now calls *GenerateEmbeddingAsync* method on the Semantic Kernal initialized in the service constructor we looked at previous, passing in the *input* string and returning  the embeddings as an array. 
+The method now calls *GenerateEmbeddingAsync* method on the Semantic Kernel initialized in the service constructor we looked at previous, passing in the *input* string and returning  the embeddings as an array. 
 
 The the GetEmbeddingsAsync method should now look like:
 ```csharp
@@ -1094,7 +1094,7 @@ Let's build our semantic cache using Semantic Kernel memory.
 
 1. Open the **Services/SemanticKernel.cs** file.
 2. Locate the **SemanticKernelService** constructor method.
-3. Locate the section which initializes the Semantic Kernal *memoryStore* and *memory* objects.
+3. Locate the section which initializes the Semantic Kernel *memoryStore* and *memory* objects.
 4. Review the  memoryStore and memory initialization code that looks like this:
 ```csharp
 // Build Sematic Kernel memory with Cosmos DB for MongoDB connector
@@ -1355,18 +1355,18 @@ Using the SDKs for Azure Cosmos DB for MongoDB, Azure OpenAI Service and Semanti
 
 ## References
 
-- **Complete Sample** This hands on lab is available as a completed sample here
-  - [Build a Chat App using Azure Cosmos DB](https://github.com/Azure-Samples/cosmosdb-chatgpt/)
+- **Complete Sample** This hands on lab is available as a complete sample here
+  - [Complete Copilot Sample](https://github.com/AzureCosmosDB/cosmosdb-mongo-copilot/)
 
 Take some time to explore the services and capabilities you saw today to get more familiar with them.
 
 - **Semantic Kernel**
-  - [Get started with semantic kernel](https://learn.microsoft.com/semantic-kernel/overview/)
+  - [Get started with Semantic Kernel](https://learn.microsoft.com/semantic-kernel/overview/)
 
-- **Azure Cosmos DB Vector Search**
-  - [Get started with vector search in Azure Cosmos DB](https://aka.ms/CosmosDBVectorSetup)
+- **Azure Cosmos DB for MongoDB Vector Search**
+  - [Vector store in Azure Cosmos DB for MongoDB](https://learn.microsoft.com/azure/cosmos-db/mongodb/vcore/vector-search)
 
-Take your knowledge even further. We have built a complete end-to-end RAG Pattern solution that takes this lab you did today and expands it to a fully functional, production grade solution accelerator. The solution has the same ASP.NET Blazor web interface and the back end is entirely built using the latest from Semantic Kernel. The solution can be deployed to either AKS or Azure Container Apps, along with a host of other services designed for deploying production grade applications in Azure.
+We have built a complete end-to-end, production-ready, RAG Pattern solution for Azure Cosmos DB for NoSQL that takes the concepts in this lab you did today and expands it greatly. The solution has the same ASP.NET Blazor web interface and the back end is entirely built using the latest version of Semantic Kernel. The solution can be deployed to either AKS or Azure Container Apps, along with a host of other services designed for deploying production grade applications in Azure.
 
 - **Official Microsoft Solution Accelerator for building RAG pattern applications**
-  - [Vector search AI assistant](https://github.com/Azure/Vector-Search-AI-Assistant)
+  - [Build Your Own Copilot](https://github.com/Azure/BuildYourOwnCopilot)
