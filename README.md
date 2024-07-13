@@ -7,13 +7,12 @@ products:
 - azure-openai
 name: Build a Copilot Hands-On-Lab using Azure Cosmos DB for MongoDB & Azure OpenAI Service
 urlFragment: chat-app
-description: Hands-On-Lab wiht Starter Solution that demonstrates how to build a Generative AI chat application demonstrating, context windows, semantic cache, Semantic Kernel integration and more.
-azureDeploy: https://raw.githubusercontent.com/azure-samples/cosmosdb-chatgpt/main/azuredeploy.json
+description: Hands-On-Lab with Starter Solution that shows how to build a Generative AI chat application demonstrating: context windows, semantic cache, Semantic Kernel integration and more.
 ---
 
-# Hands-On-Lab to Build a Copilot app using Azure Cosmos DB & Azure OpenAI Service
+# Hands-On-Lab to Build a Copilot app using Azure Cosmos DB for MongoDB & Azure OpenAI Service
 
-This Hands-On-Lab and starter solution walks users step-by-step how to build a Generative-AI application using Azure Cosmos DB using its new vector search capabilities and Azure OpenAI Service and Semantic Kernel. The sample provides practical guidance on many concepts you will need to design and build these types of applications.
+This Hands-On-Lab and starter solution walks users step-by-step how to build a Generative-AI application using Azure Cosmos DB for MongoDB using its new vector search capabilities and Azure OpenAI Service and Semantic Kernel. The sample provides practical guidance on many concepts you will need to design and build these types of applications.
 
 To run the Hands-On-Lab, follow the steps below then open the [Lab Guide](./docs/LABGuide.md) and complete the exercises.
 
@@ -46,7 +45,7 @@ This Hands-On-Lab demonstrates the following concepts and how to implement them:
 1. Run the following command to download this project code:
 
     ```bash
-    azd init -t AzureCosmosDB/cosmosdb-nosql-copilot
+    azd init -t AzureCosmosDB/cosmosdb-mongo-copilot
     ```
 
 1. Open a terminal and navigate to the /infra directory in this solution.
@@ -70,18 +69,24 @@ You can monitor the loading of the data through the application logs.
  
 ### Hands-On-Lab
 
-To run the Hands-On-Lab, follow the Instructions above to download and deploy via AZD then open the [Lab Guide](./lab-guide.md) and complete the exercises.
+To run the Hands-On-Lab, follow the Instructions above to download and deploy via AZD then open the [Lab Guide](./docs/LABGuide.md) and complete the exercises.
 
 
 ## Clean up
 
-To remove all the resources used by this sample, delete the resource group for your deployment.
+1. Open a terminal and navigate to the /infra directory in this solution.
+
+1. Type azd down
+    
+    ```bash
+    azd down
+    ```
 
 ## Resources
 
 To learn more about the services and features demonstrated in this sample, see the following:
 
-- [Azure Cosmos DB for MongoDB (vCore)](https://learn.microsoft.com/en-us/azure/cosmos-db/mongodb/introduction)
+- [Azure Cosmos DB for MongoDB (vCore)](https://learn.microsoft.com/azure/cosmos-db/mongodb/vcore/introduction)
 - [Azure OpenAI Service documentation](https://learn.microsoft.com/azure/cognitive-services/openai/)
 - [Semantic Kernel](https://learn.microsoft.com/semantic-kernel/overview)
 - [Azure App Service documentation](https://learn.microsoft.com/azure/app-service/)
