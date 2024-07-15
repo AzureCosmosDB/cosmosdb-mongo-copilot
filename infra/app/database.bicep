@@ -4,6 +4,7 @@ param clusterName string
 param location string = resourceGroup().location
 param tags object = {}
 param adminUsername string = ''
+@secure()
 param adminPassword string = ''
 
 module cluster '../core/database/cosmos-db/mongodb-vcore/cosmosdb-cluster.bicep' = {

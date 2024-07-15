@@ -7,6 +7,12 @@ param environmentName string
 
 @minLength(1)
 @allowed([
+  'australiaeast'
+  'westeurope'
+  'japaneast'
+  'uksouth'
+  'eastus'
+  'southcentralus'
   'eastus2'
 ])
 @description('Primary location for all resources.')
@@ -20,6 +26,8 @@ param openAiAccountName string = ''
 param userAssignedIdentityName string = ''
 param appServicePlanName string = ''
 param appServiceWebAppName string = ''
+@secure()
+param mongoPassword string = newGuid()
 
 // serviceName is used as value for the tag (azd-service-name) azd uses to identify deployment host
 param serviceName string = 'web'
@@ -28,14 +36,14 @@ var abbreviations = loadJsonContent('abbreviations.json')
 var resourceToken = toLower(uniqueString(subscription().id, environmentName, location))
 var tags = {
   'azd-env-name': environmentName
-  repo: 'https://github.com/GaryHopeMS/cosmosdb-mongodb-copilot'
+  repo: 'https://github.com/AzureCosmosDB/cosmosdb-mongo-copilot'
 }
 
-var chatSettings = {
-  maxConversationTokens: '100'
-  cacheSimilarityScore: '0.99'
-  productMaxResults: '10'
-}
+//var chatSettings = {
+//  maxConversationTokens: '100'
+//  cacheSimilarityScore: '0.99'
+//  productMaxResults: '10'
+//}
 
 resource resourceGroup 'Microsoft.Resources/resourceGroups@2022-09-01' = {
   name: environmentName
@@ -101,7 +109,7 @@ module database 'app/database.bicep' = {
     clusterName: '${abbreviations.cosmosDbCluster}-${resourceToken}'
     location: location
     adminUsername: 'Admin${resourceToken}' 
-    adminPassword: 'PAssw0rd${resourceToken}!' 
+    adminPassword: mongoPassword //'PAssw0rd${resourceToken}!' 
   }
 }
 
