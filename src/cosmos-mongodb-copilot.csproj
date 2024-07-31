@@ -12,13 +12,14 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Azure.Identity" Version="1.12.0" />
-		<PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
+		<PackageReference Include="Azure.Storage.Blobs" Version="12.21.1" />
 		<PackageReference Include="Humanizer" Version="2.*" />
 		<PackageReference Include="Microsoft.ML.Tokenizers" Version="0.22.0-preview.24179.1" />
-		<PackageReference Include="Microsoft.SemanticKernel" Version="1.11.0" />
-		<PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureCosmosDBMongoDB" Version="1.11.1-alpha" />
-		<PackageReference Include="MongoDB.Driver" Version="2.*" />
+		<PackageReference Include="Microsoft.SemanticKernel" Version="1.16.2" />
+		<PackageReference Include="Microsoft.SemanticKernel.Connectors.AzureCosmosDBMongoDB" Version="1.16.2-alpha" />
+		<PackageReference Include="MongoDB.Driver" Version="2.27.0" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.*" />
 		<PackageReference Include="Azure.AI.OpenAI" Version="1.0.0-beta.*" />
+		<PackageReference Include="System.Text.Json" Version="8.0.4" />
 	</ItemGroup>
 </Project>
