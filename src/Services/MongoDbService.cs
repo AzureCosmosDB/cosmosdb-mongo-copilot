@@ -480,6 +480,9 @@ public class MongoDbService
                     _logger.LogInformation($"written {documentCounter} documents ");
                 }
 
+                /// Slow load to avoid rate limiting - remove to improve load performance 
+                Thread.Sleep(10);
+
                 /// Very slow load to avoid rate limiting - remove to improve load performance 
                 //  _logger.LogInformation("waiting 60 seconds");
                 // System.Threading.Thread.Sleep(60000);
