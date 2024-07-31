@@ -7,6 +7,7 @@ using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Microsoft.SemanticKernel.Memory;
 using Microsoft.SemanticKernel.Connectors.AzureCosmosDBMongoDB;
 using Azure.Identity;
+using MongoDB.Driver;
 
 using Search.Options;
 using Search.Models;
