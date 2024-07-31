@@ -66,14 +66,14 @@ module appServiceWebAppConfig '../core/host/app-service/config.bicep' = {
        OpenAi__Endpoint : configSettings.OpenAiEndpoint
        OpenAi__CompletionsDeployment : configSettings.OpenAiCompletionsDeployment
        OpenAi__EmbeddingsDeployment : configSettings.OpenAiEmbeddingsDeployment
-       OpenAi__MaxEmbeddingTokens : '4000'
+       OpenAi__MaxEmbeddingTokens : '2000'
        OpenAi__MaxConversationTokens : '1500'
-       OpenAi__MaxCompletionTokens : '4000'
-       OpenAi__MaxContextTokens : '4000'
+       OpenAi__MaxCompletionTokens : '2000'
+       OpenAi__MaxContextTokens : '2000'
        MongoDb__Connection : configSettings.MongoDbConnection
        MongoDb__DatabaseName : 'retaildb'
        MongoDb__CollectionNames : 'products, customers, salesOrders, completions'
-       MongoDb__MaxVectorSearchResults : '50'
+       MongoDb__MaxVectorSearchResults : '20'
        MongoDb__VectorIndexType : 'hnsw'
        AZURE_CLIENT_ID: userAssignedManagedIdentity.clientId
     }

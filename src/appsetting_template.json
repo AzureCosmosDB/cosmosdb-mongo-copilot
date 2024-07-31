@@ -12,9 +12,9 @@
     "EmbeddingsDeployment": "ada-002",
     "CompletionsDeployment": "gpt35",
     "MaxConversationTokens": "1500",
-    "MaxContextTokens": "4000",
-    "MaxCompletionTokens": "4000",
-    "MaxEmbeddingTokens": "4000"
+    "MaxContextTokens": "2000",
+    "MaxCompletionTokens": "2000",
+    "MaxEmbeddingTokens": "2000"
   },
   "MongoDb": {
     "Connection": "mongodb+srv://{YourMongoUsername}:{YourMongoKey}@{YourMonogClusterName}.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000",
